@@ -1,0 +1,112 @@
+// segment tree sum
+struct segtree{
+	int n;
+	vector<ll> sum;
+	void init(int n0){
+		n = 1;
+		while (n < n0) n*=2;
+		sum.assign(2*n, 0ll);
+	}
+
+	void set(int i, ll v, int curr, int lc, int rc){
+		if (lc+1 == rc){
+			sum[curr] = v;
+			return;
+		}
+		int m = (rc+lc)/2;
+		if (i < m) set(i, v, 2*curr+1, lc, m);
+		else set(i, v, 2*curr+2, m, rc);
+		sum[curr] = sum[2*curr+1]+sum[2*curr+2];
+	}
+
+	void set(int i, ll v){
+		set(i, v, 0, 0, n);
+	}
+
+	ll get(int l, int r, int curr, int lc, int rc){
+		if (lc >= r || r <= lc) return 0;
+		if (lc >= l && rc <= r) return sum[curr];
+		int m = (lc+rc)/2;
+		return (get(l, r, 2*curr+1, lc, m) + get(l, r, 2*curr+2, m, rc));
+	}
+
+	ll get(int l, int r){
+		return get(l, r+1, 0, 0, n);
+	}
+};
+
+// segment tree max
+struct segtree{
+	int n;
+	vector<ll> maxi;
+	void init(int n0){
+		n = 1;
+		while (n < n0) n*=2;
+		maxi.assign(2*n, numeric_limits<ll>::min());
+	}
+
+	void set(int i , ll val, int curr, int lc, int rc){
+		if (lc+1 == rc){
+			maxi[curr] = val;
+			return;
+		}
+		int m = (rc+lc)/2;
+		if (i < m) set(i, val, 2*curr+1, lc, m);
+		else set(i, val, 2*curr+2, m, rc);
+		maxi[curr] = max(maxi[2*curr+1], maxi[2*curr+2]);
+	}
+
+	void set(int i, ll val){
+		set(i, val, 0, 0, n);
+	}
+
+	ll get(int l, int r, int curr, int lc, int rc){
+		if (lc >= r || rc <= l) return numeric_limits<ll>::min();
+		if (lc >= l && rc <= r) return maxi[curr];
+		
+		int m = (lc+rc)/2;
+		return max(get(l, r, 2*curr+1, lc, m), get(l, r, 2*curr+2, m, rc));
+	}
+
+	ll get(int l, int r){
+		return get(l, r+1, 0, 0, n);
+	}
+};
+
+// segment tree min
+struct segtree{
+	int n;
+	vector<ll> mini;
+	void init(int n0){
+		n = 1;
+		while (n < n0) n*=2;
+		mini.assign(2*n, numeric_limits<ll>::max());
+	}
+
+	void set(int i, ll val, int curr, int lc, int rc){
+		if (lc+1 == rc){
+			mini[curr] = val;
+			return;
+		}
+		int m = (lc+rc)/2;
+		if (i < m) set(i, val, 2*curr+1, lc, m);
+		else set(i, val, 2*curr+2, m, rc);
+		mini[curr] = min(mini[2*curr+1], mini[2*curr+2]);
+	}
+
+	void set(int i, ll val){
+		set(i, val, 0, 0, n);
+	}
+
+	ll get(int l, int r, int curr, int lc, int rc){
+		if (lc >= l && rc <= r) return mini[curr];
+		if (lc >= r || rc <= l) return numeric_limits<ll>::max();
+
+		int m = (lc+rc)/2;
+		return min(get(l, r, 2*curr+1, lc, m), get(l, r, 2*curr+2, m, rc));
+	}
+
+	ll get(int l, int r){
+		return get(l, r+1, 0, 0, n);
+	}
+};

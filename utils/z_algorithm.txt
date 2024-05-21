@@ -1,0 +1,28 @@
+vector<int> zalgo(string s){
+	int n = s.length();
+	vector<int> z(n);
+
+	int l = 0, r = 0;
+	for (int i = 1; i < n; i++){
+		if (i > r){ // new box
+			l = r = i;
+			while (r < n && s[r] == s[r-l]) r++;
+			r--;
+			z[i] = r-l+1;
+		}
+		else{ // same box
+			int i2 = i-l;
+			if (z[i2] < r-i+1){ // in box not touching
+				z[i] = z[i2];
+			}
+			else{
+				l = i;
+				while (r < n && s[r] == s[r-l]) r++;
+				r--;
+				z[i] = r-l+1;
+			}
+			
+		}
+	}
+	return z;
+}
