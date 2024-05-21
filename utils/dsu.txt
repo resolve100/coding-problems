@@ -1,0 +1,30 @@
+class dsu{
+public:
+	vector<int> p;
+	dsu(int n){
+		p.resize(n, -1);
+	}
+	int get(int curr){
+		if (p[curr] >= 0){
+			p[curr] = get(p[curr]);
+			return p[curr];
+		}
+		else{
+			return curr;
+		}
+	}
+	void uni(int a, int b){
+		int rep1 = get(a), rep2 = get(b);
+		if (rep1 != rep2){
+			int s1 = abs(p[rep1]), s2 = abs(p[rep2]);
+			if (s1 >= s2){
+				p[rep1] += p[rep2];
+				p[rep2] = rep1;
+			}
+			else{
+				p[rep2] += p[rep1];
+				p[rep1] = rep2;
+			}
+		}
+	}
+};
